@@ -1,0 +1,45 @@
+.contact {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 120%, var(--maroon) 0%, var(--ink) 65%);
+}
+
+.contact__mandala {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(560px, 120vw);
+  height: min(560px, 120vw);
+  transform: translate(-50%, -50%);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.contact__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.contact__heading {
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  max-width: 16ch;
+}
+
+.contact__text {
+  max-width: 46ch;
+  color: var(--cream-dim);
+  font-size: 1.02rem;
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}

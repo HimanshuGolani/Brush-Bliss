@@ -1,0 +1,129 @@
+.gallery {
+  background: var(--ink);
+}
+
+.gallery__header {
+  max-width: 620px;
+  margin-bottom: var(--space-3);
+}
+
+.gallery__heading {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-top: var(--space-1);
+}
+
+.gallery__intro {
+  margin-top: var(--space-2);
+  color: var(--cream-dim);
+  font-size: 1rem;
+}
+
+.gallery__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.gallery__filter {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  background: transparent;
+  color: var(--cream-dim);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gallery__filter:hover {
+  border-color: var(--marigold);
+  color: var(--cream);
+}
+
+.gallery__filter.is-active {
+  background: var(--marigold);
+  border-color: var(--marigold);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-2);
+}
+
+.gallery__tile {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  aspect-ratio: 4 / 5;
+  position: relative;
+  background: var(--maroon-deep);
+}
+
+.gallery__tile img,
+.gallery__tile video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery__tile figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.78rem;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), transparent);
+  color: var(--cream);
+}
+
+.gallery__empty {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-2);
+}
+
+.gallery__placeholder {
+  border: 1px dashed rgba(201, 162, 39, 0.35);
+  border-radius: var(--radius);
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: var(--space-2);
+  background: rgba(251, 243, 228, 0.02);
+}
+
+.gallery__placeholder-seal {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--gold-soft);
+}
+
+.gallery__placeholder-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--cream);
+}
+
+.gallery__placeholder-note {
+  font-size: 0.75rem;
+  color: var(--cream-dim);
+  opacity: 0.7;
+}

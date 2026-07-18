@@ -1,0 +1,130 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: transparent;
+  transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.navbar--solid {
+  background: rgba(36, 21, 5, 0.88);
+  backdrop-filter: blur(10px);
+  border-color: rgba(201, 162, 39, 0.25);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+}
+
+.navbar__logo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--cream);
+}
+
+.navbar__logo span {
+  color: var(--marigold);
+  font-style: italic;
+}
+
+.navbar__links--desktop {
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.navbar__links--desktop a:not(.btn) {
+  position: relative;
+  padding-bottom: 4px;
+  opacity: 0.9;
+  transition: opacity 0.25s ease;
+}
+
+.navbar__links--desktop a:not(.btn)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--marigold);
+  transition: width 0.3s ease;
+}
+
+.navbar__links--desktop a:not(.btn):hover {
+  opacity: 1;
+}
+
+.navbar__links--desktop a:not(.btn):hover::after {
+  width: 100%;
+}
+
+.navbar__cta {
+  padding: 0.55rem 1.3rem;
+  font-size: 0.75rem;
+}
+
+.navbar__burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.navbar__burger span {
+  display: block;
+  height: 1.5px;
+  background: var(--cream);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar__burger.is-open span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+.navbar__burger.is-open span:nth-child(2) {
+  opacity: 0;
+}
+.navbar__burger.is-open span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+.navbar__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-5);
+  background: rgba(36, 21, 5, 0.98);
+  border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+  font-size: 1.05rem;
+}
+
+.navbar__mobile .btn {
+  align-self: flex-start;
+  margin-top: var(--space-1);
+}
+
+@media (min-width: 900px) {
+  .navbar__links--desktop {
+    display: flex;
+  }
+  .navbar__burger {
+    display: none;
+  }
+}
