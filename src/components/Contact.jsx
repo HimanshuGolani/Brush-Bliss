@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Mandala from "./Mandala";
+import AnimatedButton from "./AnimatedButton";
 import "./Contact.css";
 
 export default function Contact() {
@@ -46,12 +47,12 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           {/* Update href values with the studio's real contact details */}
-          <a href="mailto:hello@brushandbliss.example" className="btn solid">
+          <AnimatedButton href="mailto:hello@brushandbliss.example" variant="solid">
             Email the Studio
-          </a>
-          <a href="https://instagram.com" className="btn" target="_blank" rel="noreferrer">
+          </AnimatedButton>
+          <AnimatedButton href="https://instagram.com" variant="outline" target="_blank" rel="noreferrer">
             Instagram
-          </a>
+          </AnimatedButton>
         </motion.div>
       </div>
     </section>

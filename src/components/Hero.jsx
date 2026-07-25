@@ -1,14 +1,30 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import Mandala from "./Mandala";
+import AnimatedButton from "./AnimatedButton";
 import "./Hero.css";
 
 export default function Hero() {
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const mandalaY = useTransform(scrollYProgress, [0, 1], [0, 140]);
+  const mandalaRotate = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
-    <section id="top" className="hero">
-      <Mandala className="hero__mandala" />
+    <section id="top" className="hero" ref={sectionRef}>
+      <div className="hero__mandala-wrap">
+  <motion.div style={{ y: mandalaY, rotate: mandalaRotate }}>
+    <Mandala className="hero__mandala" />
+  </motion.div>
+</div>
       <div className="hero__glow" aria-hidden="true" />
 
-      <div className="container hero__content">
+      <motion.div className="container hero__content" style={{ y: contentY, opacity: contentOpacity }}>
         <motion.p
           className="eyebrow"
           initial={{ opacity: 0, y: 12 }}
@@ -43,14 +59,14 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.55 }}
         >
-          <a href="#services" className="btn solid">
+          <AnimatedButton href="#services" variant="solid">
             View Services
-          </a>
-          <a href="#custom-orders" className="btn">
+          </AnimatedButton>
+          <AnimatedButton href="#custom-orders" variant="outline">
             Custom Orders
-          </a>
+          </AnimatedButton>
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.a
         href="#services"

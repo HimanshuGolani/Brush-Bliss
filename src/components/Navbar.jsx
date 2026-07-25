@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import AnimatedButton from "./AnimatedButton";
 import "./Navbar.css";
 
 const links = [
@@ -38,9 +39,9 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href="#contact" className="btn navbar__cta">
+          <AnimatedButton href="#contact" variant="outline" className="navbar__cta">
             Enquire
-          </a>
+          </AnimatedButton>
         </nav>
 
         <button
@@ -69,9 +70,9 @@ export default function Navbar() {
                 {l.label}
               </a>
             ))}
-            <a href="#contact" className="btn solid" onClick={handleLinkClick}>
+            <AnimatedButton href="#contact" variant="solid" onClick={handleLinkClick}>
               Enquire
-            </a>
+            </AnimatedButton>
           </motion.nav>
         )}
       </AnimatePresence>

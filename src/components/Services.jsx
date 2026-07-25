@@ -31,7 +31,13 @@ export default function Services() {
           viewport={{ once: true, amount: 0.15 }}
         >
           {services.map((s) => (
-            <motion.article className="service-card" key={s.id} variants={item}>
+            <motion.article
+              className="service-card"
+              key={s.id}
+              variants={item}
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+            >
               <span className="service-card__seal">{s.seal}</span>
               <h3 className="service-card__title">{s.title}</h3>
               <p className="service-card__blurb">{s.blurb}</p>
