@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiMaximize2, FiInfo } from "react-icons/fi";
+import { FiMaximize2, FiInfo, FiMail, FiPlayCircle } from "react-icons/fi";
 import { galleryItems, galleryFilters, services } from "../data/content";
 import Lightbox from "./Lightbox";
 import DetailsPanel from "./DetailsPanel";
@@ -11,11 +11,34 @@ export default function Gallery() {
   const [touchActiveId, setTouchActiveId] = useState(null);
   const [lightboxItem, setLightboxItem] = useState(null);
   const [detailsItem, setDetailsItem] = useState(null);
+  const [page, setPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 8;
 
   const filtered = useMemo(() => {
     if (active === "all") return galleryItems;
-    return galleryItems.filter((it) => it.category === active);
+    if (services.some((s) => s.id === active)) {
+      return galleryItems.filter((it) => it.category === active);
+    }
+    const subItem = galleryFilters.find((f) => f.id === active && f.group === "resin");
+    if (subItem) {
+      return galleryItems.filter(
+        (it) => it.category === "resin" && it.subcategory === active
+      );
+    }
+    return galleryItems;
   }, [active]);
+
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE) || 1;
+  const paged = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return filtered.slice(start, start + ITEMS_PER_PAGE);
+  }, [filtered, page]);
+
+  const handleFilterChange = (id) => {
+    setActive(id);
+    setPage(1);
+  };
 
   const handleTileTap = (id) => {
     // On touch devices there's no hover, so tapping the tile itself
@@ -39,8 +62,9 @@ export default function Gallery() {
           {galleryFilters.map((f) => (
             <button
               key={f.id}
-              className={`gallery__filter ${active === f.id ? "is-active" : ""}`}
-              onClick={() => setActive(f.id)}
+              className={`gallery__filter ${active === f.id ? "is-active" : ""} ${f.group === "divider" ? "is-divider" : ""} ${f.group === "resin" ? "is-sub" : ""}`}
+              onClick={() => f.id !== "resin-subcategories" && handleFilterChange(f.id)}
+              disabled={f.group === "divider"}
             >
               {f.label}
             </button>
@@ -48,7 +72,7 @@ export default function Gallery() {
         </div>
 
         <AnimatePresence mode="wait">
-          {filtered.length > 0 ? (
+          {paged.length > 0 ? (
             <motion.div
               key="grid"
               className="gallery__grid"
@@ -56,7 +80,7 @@ export default function Gallery() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              {filtered.map((it) => (
+              {paged.map((it) => (
                 <motion.figure
                   className={`gallery__tile ${touchActiveId === it.id ? "is-active" : ""}`}
                   key={it.id}
@@ -71,7 +95,19 @@ export default function Gallery() {
 
                   <div className="gallery__media">
                     {it.type === "video" ? (
-                      <video src={it.src} muted loop playsInline autoPlay preload="metadata" />
+                      <div className="gallery__video-wrapper">
+                        <video
+                          src={it.src}
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                          poster={it.thumbnail}
+                        />
+                        <span className="gallery__video-icon" aria-hidden="true">
+                          <FiPlayCircle />
+                        </span>
+                      </div>
                     ) : (
                       <img src={it.src} alt={it.title || it.caption || it.category} loading="lazy" />
                     )}
@@ -103,6 +139,19 @@ export default function Gallery() {
                         <FiInfo />
                         Details
                       </button>
+                      <button
+                        className="gallery__action"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const subject = encodeURIComponent(
+                            `Enquiry: ${it.title || it.caption || "artwork"}`
+                          );
+                          window.location.href = `mailto:soniyadlakhwani@gmail.com?subject=${subject}`;
+                        }}
+                      >
+                        <FiMail />
+                        Enquire
+                      </button>
                     </div>
                   </div>
 
@@ -131,6 +180,30 @@ export default function Gallery() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {totalPages > 1 && filtered.length > 0 && (
+          <div className="gallery__pagination">
+            <button
+              className="gallery__page-btn"
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              aria-label="Previous page"
+            >
+              ‹
+            </button>
+            <span className="gallery__page-info">
+              Page {page} of {totalPages}
+            </span>
+            <button
+              className="gallery__page-btn"
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+              aria-label="Next page"
+            >
+              ›
+            </button>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>

@@ -22,6 +22,54 @@
   height: 76px;
 }
 
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.navbar__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(251, 243, 228, 0.3);
+  background: rgba(251, 243, 228, 0.03);
+  color: var(--cream);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.navbar__cart:hover {
+  background: var(--marigold);
+  border-color: var(--marigold);
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.navbar__cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--marigold);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 .navbar__logo {
   font-family: var(--font-display);
   font-size: 1.5rem;

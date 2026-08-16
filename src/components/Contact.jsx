@@ -46,11 +46,10 @@ export default function Contact() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          {/* Update href values with the studio's real contact details */}
-          <AnimatedButton href="mailto:hello@brushandbliss.example" variant="solid">
+          <AnimatedButton href="mailto:soniyadlakhwani@gmail.com" variant="solid">
             Email the Studio
           </AnimatedButton>
-          <AnimatedButton href="https://instagram.com" variant="outline" target="_blank" rel="noreferrer">
+          <AnimatedButton href="https://www.instagram.com/brushnblissart?utm_source=qr&igsh=MXVlbWluN2pqdHZveA==" variant="outline" target="_blank" rel="noreferrer">
             Instagram
           </AnimatedButton>
         </motion.div>

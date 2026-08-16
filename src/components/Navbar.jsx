@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FiShoppingCart } from "react-icons/fi";
 import AnimatedButton from "./AnimatedButton";
+import useCart from "./useCart";
 import "./Navbar.css";
 
 const links = [
@@ -10,9 +12,10 @@ const links = [
   { href: "#contact", label: "Contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ onCartOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { totalItems } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -44,16 +47,27 @@ export default function Navbar() {
           </AnimatedButton>
         </nav>
 
-        <button
-          className={`navbar__burger ${open ? "is-open" : ""}`}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((o) => !o)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+        <div className="navbar__actions">
+          <button
+            className="navbar__cart"
+            aria-label={`Open cart (${totalItems} items)`}
+            onClick={onCartOpen}
+          >
+            <FiShoppingCart />
+            {totalItems > 0 && <span className="navbar__cart-count">{totalItems}</span>}
+          </button>
+
+          <button
+            className={`navbar__burger ${open ? "is-open" : ""}`}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((o) => !o)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

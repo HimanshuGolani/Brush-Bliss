@@ -21,6 +21,7 @@ export default function AnimatedButton({
   rel,
   ariaLabel,
   type = "button",
+  disabled = false,
 }) {
   const ref = useRef(null);
   const x = useMotionValue(0);
@@ -45,21 +46,40 @@ export default function AnimatedButton({
 
   const Component = href ? motion.a : motion.button;
 
+  const sharedProps = {
+    className: `anim-btn anim-btn--${variant} ${className}`,
+    style: { x: springX, y: springY },
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave,
+    onClick,
+    transition: { type: "spring", stiffness: 400, damping: 20 },
+  };
+
+  if (href) {
+    return (
+      <Component
+        {...sharedProps}
+        ref={ref}
+        href={href}
+        target={target}
+        rel={rel}
+        aria-label={ariaLabel}
+        whileTap={{ scale: 0.94 }}
+      >
+        <span className="anim-btn__label">{children}</span>
+        <span className="anim-btn__shimmer" aria-hidden="true" />
+      </Component>
+    );
+  }
+
   return (
     <Component
+      {...sharedProps}
       ref={ref}
-      href={href}
-      onClick={onClick}
-      target={target}
-      rel={rel}
-      type={href ? undefined : type}
+      type={type}
       aria-label={ariaLabel}
-      className={`anim-btn anim-btn--${variant} ${className}`}
-      style={{ x: springX, y: springY }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      whileTap={{ scale: 0.94 }}
-      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+      disabled={disabled}
+      whileTap={{ scale: disabled ? 1 : 0.94 }}
     >
       <span className="anim-btn__label">{children}</span>
       <span className="anim-btn__shimmer" aria-hidden="true" />

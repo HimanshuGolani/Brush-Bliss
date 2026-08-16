@@ -71,6 +71,127 @@ tagline, contact links) lives directly inside each component in
 Update the placeholder contact links in `src/components/Contact.jsx`
 (`mailto:` address and Instagram URL) with the studio's real details.
 
+## Cart, Checkout & Orders
+
+Every gallery item shows an **Add to Cart** button in its hover overlay. The
+cart slide-out (reachable from the Navbar cart icon) lets visitors review
+items, change quantities, remove pieces, and proceed to checkout. After
+checkout, visitors enter their phone, email and shipping address, then place
+the order. Their order is stored in a Google Sheet (see the next section) and
+they see a confirmation screen with the message:
+
+> Your order has been received successfully. You will be contacted over
+> WhatsApp for payment and further order details.
+
+Key files:
+
+- `src/components/CartContext.jsx` — cart state + `localStorage` persistence
+  (survives refresh) so the cart stays available across navigation.
+- `src/components/Cart.jsx` — cart slide-over with quantity controls.
+- `src/components/Checkout.jsx` — order summary + customer form, with
+  frontend validation (phone, email, shipping address) and a loading state
+  that blocks duplicate submissions.
+- `src/components/OrderConfirmation.jsx` — success screen with an order
+  summary and a "Chat on WhatsApp" link.
+- `src/lib/googleSheets.js` — builds the order payload and POSTs it to the
+  Google Apps Script endpoint configured in `.env`.
+
+### Google Sheets integration
+
+Orders are sent to Google Sheets via a **Google Apps Script web app** — no
+server needed.
+
+1. Create a Google Sheet (e.g. "Brush&Bliss Orders") and add a sheet tab
+   named `Orders`.
+2. In the sheet, open **Extensions → Apps Script** and paste this script:
+
+```js
+const SHEET_NAME = "Orders";
+const HEADERS = [
+  "Timestamp", "Order ID", "Customer Name", "Phone", "Email",
+  "Shipping Address", "Products", "Quantities", "Product Details",
+  "Item Count", "Total Amount", "Order Status",
+];
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    const row = body.row;
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(SHEET_NAME);
+    if (!sheet) {
+      sheet = ss.insertSheet(SHEET_NAME);
+      sheet.appendRow(HEADERS);
+    }
+    sheet.appendRow(row);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "success", orderId: body.payload.orderId }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "POST,OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "POST,OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+}
+
+function doOptions(e) {
+  return ContentService
+    .createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader("Access-Control-Allow-Origin", "*")
+    .setHeader("Access-Control-Allow-Methods", "POST,OPTIONS")
+    .setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+```
+
+3. Click **Deploy → New deployment**, choose **Web app**, set:
+   - *Execute as:* **Me**
+   - *Who has access:* **Anyone** (or Anyone in your organisation)
+   - *Description:* `Orders endpoint`
+4. Click **Deploy** (you may need to authorize), then **Copy link**. That is
+   your endpoint URL (it ends in `/exec`).
+5. Copy `.env.example` to `.env` and paste the URL:
+
+```
+VITE_GOOGLE_SHEETS_URL=https://script.google.com/macros/s/YOUR_ID/exec
+```
+
+> `.env` is in `.gitignore` so the URL is never committed. On Render, add the
+> same `VITE_GOOGLE_SHEETS_URL` environment variable in the dashboard. Vite
+> only exposes variables prefixed with `VITE_` to the client.
+
+6. Restart the dev server (`npm run dev`) or rebuild (`npm run build`).
+
+### Testing the flow
+
+- `npm run dev`, then click a gallery item → **Add to Cart** → open the cart
+  from the Navbar → **Checkout** → fill the form → **Place Order**.
+- With no `VITE_GOOGLE_SHEETS_URL` set, a clear error is shown instead of
+  submitting.
+- Check the Google Sheet's `Orders` tab — each order is one row with the
+  products and quantities stored so you can see exactly what was bought.
+
+## Legal pages
+
+Static, cookie-free policy pages are built as separate Vite entries:
+
+- `privacy.html`, `terms.html`, `cookies.html` (at the project root), each
+  powered by `src/components/legal/LegalPage.jsx` and content from
+  `src/data/legalContent.js`.
+- A 404 page (`404.html`) with a branded error screen, a site search that
+  filters all pages, and links back to key sections.
+
+Links to all four are in the site Footer, and the legal pages cross-link
+between each other in a header nav.
+
 ## Design notes
 
 - Palette: deep tanjore maroon + espresso-brown grounds with marigold

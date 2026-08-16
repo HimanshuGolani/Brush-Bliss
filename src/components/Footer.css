@@ -30,6 +30,26 @@
   max-width: 46ch;
 }
 
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.footer__legal-link {
+  color: var(--cream-dim);
+  opacity: 0.8;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.footer__legal-link:hover {
+  color: var(--marigold);
+  opacity: 1;
+}
+
 .footer__copy {
   font-size: 0.75rem;
   color: var(--cream-dim);

@@ -70,3 +70,33 @@
     display: none;
   }
 }
+
+.anim-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.anim-btn:disabled:hover {
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
+.anim-btn:disabled .anim-btn__shimmer {
+  display: none;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

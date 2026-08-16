@@ -75,7 +75,7 @@ export default function DetailsPanel({ item, onClose, onViewFullScreen }) {
           {item.description && <p className="details-panel__desc">{item.description}</p>}
 
           <AnimatedButton
-            href={`mailto:hello@brushandbliss.example?subject=Enquiry: ${encodeURIComponent(
+            href={`mailto:soniyadlakhwani@gmail.com?subject=Enquiry: ${encodeURIComponent(
               item.title || item.caption || "artwork"
             )}`}
             variant="solid"
